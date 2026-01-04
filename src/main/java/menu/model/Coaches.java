@@ -2,6 +2,7 @@ package menu.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Coaches {
@@ -23,5 +24,11 @@ public class Coaches {
                 .map(Coach::new)
                 .collect(Collectors.toList());
         return new Coaches(coaches);
+    }
+
+    public <R> List<R> map(Function<Coach, R> mapper) {
+        return coaches.stream()
+                .map(mapper)
+                .collect(Collectors.toList());
     }
 }

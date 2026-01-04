@@ -6,6 +6,8 @@ import static menu.model.Category.JAPANESE;
 import static menu.model.Category.KOREAN;
 import static menu.model.Category.WESTERN;
 
+import java.util.Arrays;
+
 public enum Menu {
     GYUDON(JAPANESE, "규동"),
     UDON(JAPANESE, "우동"),
@@ -64,5 +66,12 @@ public enum Menu {
     Menu(Category category, String menu) {
         this.category = category;
         this.menu = menu;
+    }
+
+    public static Menu from(String menuName) {
+        return Arrays.stream(values())
+                .filter(menu -> menu.menu.equals(menuName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메뉴입니다."));
     }
 }
