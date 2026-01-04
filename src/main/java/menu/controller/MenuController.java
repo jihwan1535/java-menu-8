@@ -2,9 +2,10 @@ package menu.controller;
 
 import java.util.List;
 import java.util.function.Consumer;
+import menu.model.Coach;
+import menu.model.CoacheNames;
 import menu.model.Coaches;
 import menu.model.Menus;
-import menu.model.Recommender;
 import menu.util.ExceptionHandler;
 import menu.view.InputView;
 import menu.view.OutputView;
@@ -17,11 +18,16 @@ public class MenuController {
     public void run() {
         outputView.printIntro();
 
-        Coaches coaches = ExceptionHandler.handle(inputView::readCoaches, processError());
-        List<Recommender> recommenders = coaches.map(coach -> {
+        CoacheNames coacheNames = ExceptionHandler.handle(inputView::readCoaches, processError());
+        Coaches coaches = createCoaches(coacheNames);
+    }
+
+    private Coaches createCoaches(CoacheNames coacheNames) {
+        List<Coach> coaches = coacheNames.map(coach -> {
             Menus hateMenus = ExceptionHandler.handle(() -> inputView.readHateMenuByCoach(coach), processError());
-            return new Recommender(coach, hateMenus);
+            return new Coach(coach, hateMenus);
         });
+        return new Coaches(coaches);
     }
 
     private Consumer<IllegalArgumentException> processError() {
