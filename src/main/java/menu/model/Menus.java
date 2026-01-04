@@ -8,7 +8,7 @@ public class Menus {
 
     private final List<Menu> menus;
 
-    private Menus(List<Menu> menus) {
+    public Menus(List<Menu> menus) {
         this.menus = new ArrayList<>(menus);
     }
 
@@ -20,5 +20,18 @@ public class Menus {
                 .map(Menu::from)
                 .collect(Collectors.toList());
         return new Menus(menus);
+    }
+
+    public void add(Menu recommendedMenu) {
+        menus.add(recommendedMenu);
+    }
+
+    public boolean contain(Menu recommendedMenu) {
+        return menus.stream()
+                .anyMatch(menu -> menu == recommendedMenu);
+    }
+
+    public List<Menu> menus() {
+        return menus;
     }
 }

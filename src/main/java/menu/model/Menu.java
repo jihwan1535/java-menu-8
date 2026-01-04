@@ -7,6 +7,8 @@ import static menu.model.Category.KOREAN;
 import static menu.model.Category.WESTERN;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public enum Menu {
     GYUDON(JAPANESE, "규동"),
@@ -73,5 +75,15 @@ public enum Menu {
                 .filter(menu -> menu.menu.equals(menuName))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메뉴입니다."));
+    }
+
+    public static List<Menu> getMenusByCategory(Category category) {
+        return Arrays.stream(values())
+                .filter(menu -> menu.category.equals(category))
+                .collect(Collectors.toList());
+    }
+
+    public String menu() {
+        return menu;
     }
 }

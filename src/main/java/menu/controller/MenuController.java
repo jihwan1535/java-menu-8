@@ -19,6 +19,7 @@ public class MenuController {
     private static Recommender recommendMenu(Coaches coaches) {
         Recommender recommender = Recommender.from(coaches);
         recommender.choiceWeekCategories();
+        recommender.recommendMenus();
         return recommender;
     }
 

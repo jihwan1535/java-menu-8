@@ -1,8 +1,12 @@
 package menu.view;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import menu.model.Category;
+import menu.model.Coach;
+import menu.model.Menu;
+import menu.model.Menus;
 import menu.model.Recommender;
 
 public class OutputView {
@@ -25,8 +29,17 @@ public class OutputView {
         System.out.println();
         System.out.println("[ 구분 | 월요일 | 화요일 | 수요일 | 목요일 | 금요일 ]");
         printRecommendedCategories(recommender.getCategories());
-
+        printRecommendedMenuByCoach(recommender.getRecommendedMenus());
         System.out.println();
         System.out.println("추천을 완료했습니다.");
+    }
+
+    private void printRecommendedMenuByCoach(Map<Coach, Menus> recommendedMenus) {
+        for (Coach coach : recommendedMenus.keySet()) {
+            Menus menus = recommendedMenus.get(coach);
+            List<String> menuNames = menus.menus().stream().map(Menu::menu).collect(Collectors.toList());
+            String menusFormat = String.join(" | ", menuNames);
+            System.out.printf("[ %s | %s ]%n", coach.getName(), menusFormat);
+        }
     }
 }
