@@ -77,9 +77,10 @@ public enum Menu {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메뉴입니다."));
     }
 
-    public static List<Menu> getMenusByCategory(Category category) {
+    public static List<String> getMenuNamesByCategory(Category category) {
         return Arrays.stream(values())
-                .filter(menu -> menu.category.equals(category))
+                .filter(menu -> menu.category == category)
+                .map(menu -> menu.menu)
                 .collect(Collectors.toList());
     }
 

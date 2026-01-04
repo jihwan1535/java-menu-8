@@ -24,10 +24,10 @@ public class Recommender {
         return new Recommender(Categories.creatEmpty(), coaches);
     }
 
-    private static Menu recommendMenu(Coach coach, List<Menu> menus) {
-        Menu recommendedMenu = Randoms.shuffle(menus).get(0);
-        while (coach.hateMenu(recommendedMenu)) {
-            recommendedMenu = Randoms.shuffle(menus).get(0);
+    private static Menu recommendMenuByCoach(Coach coach, List<String> menus, Menus recommendedMenus) {
+        Menu recommendedMenu = Menu.from(Randoms.shuffle(menus).get(0));
+        while (coach.hateMenu(recommendedMenu) || recommendedMenus.contain(recommendedMenu)) {
+            recommendedMenu = Menu.from(Randoms.shuffle(menus).get(0));
         }
         return recommendedMenu;
     }
@@ -40,20 +40,19 @@ public class Recommender {
     }
 
     public void recommendMenus() {
-        for (Coach coach : coaches.coaches()) {
-            Menus menus = recommendMenu(coach);
-            recommendedMenus.put(coach, menus);
+        for (Category category : categories.categories()) {
+            List<String> menus = Menu.getMenuNamesByCategory(category);
+            recommendMenu(menus);
         }
     }
 
-    private Menus recommendMenu(Coach coach) {
-        Menus recommendedMenus = new Menus(new ArrayList<>());
-        for (Category category : categories.categories()) {
-            List<Menu> menus = Menu.getMenusByCategory(category);
-            Menu recommendedMenu = recommendMenu(coach, menus);
+    private void recommendMenu(List<String> menus) {
+        for (Coach coach : coaches.coaches()) {
+            Menus recommendedMenus = this.recommendedMenus.getOrDefault(coach, new Menus(new ArrayList<>()));
+            Menu recommendedMenu = recommendMenuByCoach(coach, menus, recommendedMenus);
             recommendedMenus.add(recommendedMenu);
+            this.recommendedMenus.put(coach, recommendedMenus);
         }
-        return recommendedMenus;
     }
 
     private Category createNewCategory() {
